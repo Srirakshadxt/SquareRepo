@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SquareRepo</string>
+    <string name="square_repositories">Square Repositories</string>
+    <string name="Created">Created</string>
+    <string name="Updated">Updated</string>
+    <string name="Pushed">Pushed</string>
+    <string name="Watchers">Watchers</string>
+    <string name="no_network_connection_available">No network connection available</string>
+    <string name="no_more_pages_available">No more pages available</string>
+    <string name="something_went_wrong">Something went wrong, please try again later</string>
 </resources>
