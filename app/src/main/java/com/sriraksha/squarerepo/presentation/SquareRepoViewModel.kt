@@ -6,7 +6,6 @@ import com.sriraksha.squarerepo.R
 import com.sriraksha.squarerepo.data.NoMorePagesException
 import com.sriraksha.squarerepo.data.NoNetworkException
 import com.sriraksha.squarerepo.data.RemoteDataSourceException
-import com.sriraksha.squarerepo.data.model.SquareRepo
 import com.sriraksha.squarerepo.domain.usecases.GetSquareReposUseCase
 import com.sriraksha.squarerepo.presentation.utils.ResourcesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +15,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for loading square repositories and handling UI state.
+ */
 @HiltViewModel
 class SquareRepoViewModel @Inject constructor(
     private val getSquareReposUseCase: GetSquareReposUseCase,
@@ -24,9 +26,6 @@ class SquareRepoViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<SquareUiState>(SquareUiState.Loading)
     val uiState: StateFlow<SquareUiState> = _uiState.asStateFlow()
-
-    private val _selectedPlanet = MutableStateFlow<SquareRepo?>(null)
-    val selectedPlanet: StateFlow<SquareRepo?> = _selectedPlanet.asStateFlow()
 
     fun loadSquareRepositories() {
         viewModelScope.launch {

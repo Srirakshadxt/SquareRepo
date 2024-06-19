@@ -91,6 +91,4 @@ class SquareRepositoryImplTest {
             assertEquals(emptyList<ApiSquareRepos>(), result)
 
         }
-
-
 }

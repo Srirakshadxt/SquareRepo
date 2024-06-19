@@ -4,6 +4,10 @@ import com.sriraksha.squarerepo.data.model.ApiSquareRepos
 import com.sriraksha.squarerepo.data.model.SquareRepo
 import javax.inject.Inject
 
+/**
+ * Maps ApiSquareRepos objects received from the API to SquareRepo objects,
+ * ensuring required fields are valid and returning null if validation fails.
+ */
 class ApiSquareRepoMapper @Inject constructor() :
     ApiMapper<ApiSquareRepos, SquareRepo?> {
     override fun mapToDomain(input: ApiSquareRepos): SquareRepo? {

@@ -4,9 +4,57 @@ import com.google.gson.Gson
 import com.sriraksha.squarerepo.data.model.ApiSquareRepos
 import com.sriraksha.squarerepo.data.model.SquareRepo
 
+/**
+ * Factory class for generating test data related to Square repositories API responses and objects.
+ */
 class TestDataFactory {
 
     companion object {
+
+        /**
+         * Creates a list of ApiSquareRepos objects from a predefined JSON response and a single object from valid JSON without optional fields.
+         * Creates a SquareRepo object with customizable parameters.
+         */
+        fun createApiSquareReposResponse(): List<ApiSquareRepos> {
+            return listOf((Gson().fromJson(apiResponse, ApiSquareRepos::class.java)))
+        }
+
+        /**
+         * Creates a SquareRepo object with customizable parameters.
+         */
+        fun createResponseValidJsonStringWithoutOptionalFields(): ApiSquareRepos {
+            return (Gson().fromJson(
+                validJsonStringWithoutOptionalFields,
+                ApiSquareRepos::class.java
+            ))
+        }
+
+        /**
+         * Creates a SquareRepo object with customizable parameters.
+         */
+        fun createSquareRepo(
+            id: Long = 1,
+            ownerId: Long = 1,
+            name: String = "Sample Repo",
+            description: String = "Sample description",
+            imageUrl: String = "https://example.com/image.png",
+            openIssuesCount: Long = 0,
+            createdAt: String = "2024-01-01T12:00:00Z",
+            updatedAt: String = "2024-01-01T12:00:00Z",
+            pushedAt: String = "2024-01-01T12:00:00Z",
+            watchersCount: Long = 0,
+            organizationsUrl: String = "https://api.github.com/orgs/example",
+            reposUrl: String = "https://api.github.com/repos/example/sample-repo",
+            type: String = "repo",
+            siteAdmin: Boolean = false
+        ): SquareRepo {
+            return SquareRepo(
+                id, ownerId, name, description, imageUrl, openIssuesCount,
+                createdAt, updatedAt, pushedAt, watchersCount, organizationsUrl,
+                reposUrl, type, siteAdmin
+            )
+        }
+
         private val apiResponse = """
         {
             "id": 12345,
@@ -126,22 +174,7 @@ class TestDataFactory {
         }
     """.trimIndent()
 
-        fun createApiSquareReposResponse(): List<ApiSquareRepos> {
-            return listOf((Gson().fromJson(apiResponse, ApiSquareRepos::class.java)))
-        }
-
-        fun createApiSquareReposInvalidResponse(): List<ApiSquareRepos> {
-            return listOf(
-                Gson().fromJson(
-                    apiResponse.replace(
-                        "\"name\": \"repo-name\",",
-                        "\"name\": \"null\","
-                    ), ApiSquareRepos::class.java
-                )
-            )
-        }
-
-        val validJsonStringWithoutOptionalFields = """
+        private val validJsonStringWithoutOptionalFields = """
               {
                   "id": 1,
                   "node_id": "MDEwOlJlcG9zaXRvcnkx",
@@ -161,38 +194,6 @@ class TestDataFactory {
                   "watchers_count": 78
               }
               """.trimIndent()
-
-        fun createResponseValidJsonStringWithoutOptionalFields(): ApiSquareRepos {
-            return (Gson().fromJson(
-                validJsonStringWithoutOptionalFields,
-                ApiSquareRepos::class.java
-            ))
-        }
-
-
-        fun createSquareRepo(
-            id: Long = 1,
-            ownerId: Long = 1,
-            name: String = "Sample Repo",
-            description: String = "Sample description",
-            imageUrl: String = "https://example.com/image.png",
-            openIssuesCount: Long = 0,
-            createdAt: String = "2024-01-01T12:00:00Z",
-            updatedAt: String = "2024-01-01T12:00:00Z",
-            pushedAt: String = "2024-01-01T12:00:00Z",
-            watchersCount: Long = 0,
-            organizationsUrl: String = "https://api.github.com/orgs/example",
-            reposUrl: String = "https://api.github.com/repos/example/sample-repo",
-            type: String = "repo",
-            siteAdmin: Boolean = false
-        ): SquareRepo {
-            return SquareRepo(
-                id, ownerId, name, description, imageUrl, openIssuesCount,
-                createdAt, updatedAt, pushedAt, watchersCount, organizationsUrl,
-                reposUrl, type, siteAdmin
-            )
-        }
-
     }
 }
 

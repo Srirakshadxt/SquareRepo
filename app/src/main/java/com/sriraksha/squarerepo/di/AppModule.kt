@@ -10,10 +10,13 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
+/**
+ * Provides dependencies for SquareReposApi and SquareRepository using Dagger's SingletonComponent.
+ */
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Provides
     @Singleton
     fun provideSquareApi(retrofit: Retrofit): SquareReposApi {
@@ -25,6 +28,4 @@ object AppModule {
     fun provideSquareRepository(
         squareRepositoryImpl: SquareRepositoryImpl
     ): SquareRepository = squareRepositoryImpl
-
-
 }

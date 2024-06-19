@@ -68,5 +68,4 @@ class ApiSquareRepoMapperTest {
         assertEquals(false, squareRepo?.siteAdmin)
     }
 
-
 }

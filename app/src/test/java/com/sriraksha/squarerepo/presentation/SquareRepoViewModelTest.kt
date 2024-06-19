@@ -1,6 +1,5 @@
 package com.sriraksha.squarerepo.presentation
 
-import com.sriraksha.squarerepo.data.NoMorePagesException
 import com.sriraksha.squarerepo.data.NoNetworkException
 import com.sriraksha.squarerepo.data.RemoteDataSourceException
 import com.sriraksha.squarerepo.domain.usecases.GetSquareReposUseCase
@@ -133,11 +132,9 @@ class SquareRepoViewModelTest {
     @Test
     fun `loadSquareRepositories should handle empty squareResponse`() = runTest {
         // Arrange
-        val unexpectedException = NoMorePagesException("No more pages available")
         coEvery { getSquareReposUseCase() } returns Result.success(emptyList())
         // Act
         squareRepoViewModel.loadSquareRepositories()
-
 
         // Assert
         assertTrue(squareRepoViewModel.uiState.value is SquareUiState.Error)

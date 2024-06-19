@@ -5,9 +5,5 @@
 
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowEnterAnimation">@drawable/splash_screen</item>
-        <!-- Required for animated icons. -->
-        <item name="android:windowSplashScreenAnimationDuration">200</item>
-
     </style>
 </resources>

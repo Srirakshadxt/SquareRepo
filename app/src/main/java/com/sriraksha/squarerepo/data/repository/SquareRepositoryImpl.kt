@@ -11,6 +11,10 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
 
+/**
+ * Implements the SquareRepository interface to fetch and map square repository data,
+ * handling errors and network issues.
+ */
 class SquareRepositoryImpl @Inject constructor(
     private val squareReposApi: SquareReposApi,
     private val apiSquareRepoMapper: ApiSquareRepoMapper

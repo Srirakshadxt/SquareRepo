@@ -9,6 +9,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/**
+ * Provides a singleton Retrofit instance configured with the base URL and Gson converter factory.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {

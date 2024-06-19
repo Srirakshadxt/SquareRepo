@@ -7,6 +7,9 @@ import com.sriraksha.squarerepo.data.model.SquareRepo
 import com.sriraksha.squarerepo.domain.respository.SquareRepository
 import javax.inject.Inject
 
+/**
+ * Use case for fetching square repositories from the repository, handling success and error cases.
+ */
 class GetSquareReposUseCase @Inject constructor(
     private val squareRepository: SquareRepository
 ) {
