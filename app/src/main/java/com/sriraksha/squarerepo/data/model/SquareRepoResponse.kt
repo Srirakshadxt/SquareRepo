@@ -2,9 +2,9 @@ package com.sriraksha.squarerepo.data.model
 
 import com.google.gson.annotations.SerializedName
 
-typealias SquareResponse = List<ApiSquare>?
+typealias SquareRepoResponse = List<ApiSquareRepos>?
 
-data class ApiSquare(
+data class ApiSquareRepos(
     val id: Long?,
     @SerializedName("node_id")
     val nodeId: String,

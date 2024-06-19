@@ -1,6 +1,6 @@
 package com.sriraksha.squarerepo.di
 
-import com.sriraksha.squarerepo.data.api.SquareApi
+import com.sriraksha.squarerepo.data.api.SquareReposApi
 import com.sriraksha.squarerepo.data.repository.SquareRepositoryImpl
 import com.sriraksha.squarerepo.domain.respository.SquareRepository
 import dagger.Module
@@ -16,8 +16,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSquareApi(retrofit: Retrofit): SquareApi {
-        return retrofit.create(SquareApi::class.java)
+    fun provideSquareApi(retrofit: Retrofit): SquareReposApi {
+        return retrofit.create(SquareReposApi::class.java)
     }
 
     @Provides

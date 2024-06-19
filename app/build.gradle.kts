@@ -51,6 +51,15 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/*"
+        }
+    }
+    testOptions {
+        packagingOptions {
+            // Required for Compose UI Test
+            jniLibs {
+                useLegacyPackaging = true
+            }
         }
     }
 }
@@ -63,6 +72,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.splash.screen)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -74,10 +84,16 @@ dependencies {
     implementation(libs.coil.kt.compose)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockk.kotlin)
+    testImplementation(libs.hilt.android.test)
+    testImplementation(libs.coroutine.test)
+    kaptTest(libs.hilt.compiler)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.mockk.android)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

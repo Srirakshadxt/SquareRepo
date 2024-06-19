@@ -1,12 +1,12 @@
 package com.sriraksha.squarerepo.data.mapper
 
-import com.sriraksha.squarerepo.data.model.ApiSquare
+import com.sriraksha.squarerepo.data.model.ApiSquareRepos
 import com.sriraksha.squarerepo.data.model.SquareRepo
 import javax.inject.Inject
 
-class ApiSquareMapper @Inject constructor() :
-    ApiMapper<ApiSquare, SquareRepo?> {
-    override fun mapToDomain(input: ApiSquare): SquareRepo? {
+class ApiSquareRepoMapper @Inject constructor() :
+    ApiMapper<ApiSquareRepos, SquareRepo?> {
+    override fun mapToDomain(input: ApiSquareRepos): SquareRepo? {
         // Validate id
         val id = input.id ?: return null
 

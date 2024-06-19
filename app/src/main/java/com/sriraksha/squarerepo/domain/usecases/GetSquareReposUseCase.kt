@@ -7,8 +7,7 @@ import com.sriraksha.squarerepo.data.model.SquareRepo
 import com.sriraksha.squarerepo.domain.respository.SquareRepository
 import javax.inject.Inject
 
-
-class GetSquareRepository @Inject constructor(
+class GetSquareReposUseCase @Inject constructor(
     private val squareRepository: SquareRepository
 ) {
     companion object {
@@ -18,13 +17,13 @@ class GetSquareRepository @Inject constructor(
     suspend operator fun invoke(): Result<List<SquareRepo>> {
         return try {
             Log.i(TAG, "Getting square repositories")
-            val squareRepository = squareRepository.getSquare()
+            val squareResponse = squareRepository.getSquareRepo()
             Log.d(TAG, "Got repositories successfully: $squareRepository")
-            Result.success(squareRepository)
+            Result.success(squareResponse)
         } catch (e: NoNetworkException) {
-            Log.e(TAG, "Something went wrong while getting dates.", e)
             Result.failure(e)
         } catch (e: RemoteDataSourceException) {
+            Log.e(TAG, "Something went wrong while getting dates.", e)
             Result.failure(e)
         }
     }

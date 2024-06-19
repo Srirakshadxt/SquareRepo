@@ -1,7 +1,6 @@
 package com.sriraksha.squarerepo.ui.screens
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,41 +14,45 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.sriraksha.squarerepo.R
 import com.sriraksha.squarerepo.data.model.SquareRepo
+import com.sriraksha.squarerepo.presentation.SquareRepoViewModel
 import com.sriraksha.squarerepo.presentation.SquareUiState
-import com.sriraksha.squarerepo.presentation.SquareViewModel
+import com.sriraksha.squarerepo.presentation.utils.DateUtils.Companion.DATE_FORMAT_EEEE_DD_MMMM_YYYY
+import com.sriraksha.squarerepo.presentation.utils.DateUtils.Companion.dateToString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SquareRepoScreen(
-    viewModel: SquareViewModel = hiltViewModel(),
-    onItemClick: (SquareRepo) -> Unit = {}
+    viewModel: SquareRepoViewModel = hiltViewModel()
 ) {
     val squareUiState by viewModel.uiState.collectAsState()
 
@@ -58,12 +61,14 @@ fun SquareRepoScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Square Repositories",
-                        style = MaterialTheme.typography.headlineMedium
+                        text = stringResource(id = R.string.square_repositories),
+                        style = MaterialTheme.typography.headlineSmall
                     )
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.onPrimary)
             )
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.onPrimary
     ) { contentPadding ->
         Box(
             modifier = Modifier
@@ -72,10 +77,13 @@ fun SquareRepoScreen(
         ) {
             when (squareUiState) {
                 is SquareUiState.Loading -> LoadingScreen()
-                is SquareUiState.Error -> ErrorScreen((squareUiState as SquareUiState.Error).errorMessage)
+                is SquareUiState.Error -> ErrorScreen(
+                    (squareUiState as SquareUiState.Error).errorMessage,
+                    onRetry = viewModel::loadSquareRepositories
+                )
+
                 is SquareUiState.Success -> SquareRepoList(
-                    repositories = (squareUiState as SquareUiState.Success).squareRepos,
-                    onItemClick = onItemClick
+                    repositories = (squareUiState as SquareUiState.Success).squareRepos
                 )
             }
         }
@@ -83,41 +91,8 @@ fun SquareRepoScreen(
 }
 
 @Composable
-fun LoadingScreen(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.scale(2f),
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-}
-
-@Composable
-fun ErrorScreen(
-    errorMessage: String,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = errorMessage,
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.error
-        )
-    }
-}
-
-@Composable
 fun SquareRepoList(
     repositories: List<SquareRepo>,
-    onItemClick: (SquareRepo) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -130,8 +105,7 @@ fun SquareRepoList(
         items(repositories) { repo ->
             SquareRepoListItem(
                 repo = repo,
-                onItemClick = onItemClick,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(10.dp)
             )
         }
     }
@@ -140,71 +114,83 @@ fun SquareRepoList(
 @Composable
 fun SquareRepoListItem(
     repo: SquareRepo,
-    onItemClick: (SquareRepo) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.medium)
-            .clickable { onItemClick(repo) }
+            .clip(MaterialTheme.shapes.medium),
+        colors = CardDefaults.cardColors(
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            containerColor = MaterialTheme.colorScheme.onPrimary.copy(0.10f)
+        )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(10.dp)
+                .clip(MaterialTheme.shapes.large)
+                .background(MaterialTheme.colorScheme.onBackground.copy(0.10f))
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
                     model = repo.imageUrl,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape)
+                        .size(44.dp)
+                        .clip(RectangleShape)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Text(
                         text = repo.name,
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black)
                     )
                     Text(
                         text = repo.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 2,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(top = 8.dp),
+                        maxLines = 5,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Divider(
+            Spacer(modifier = Modifier.height(10.dp))
+            HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
                 SquareRepoMetadata(
                     icon = Icons.Default.DateRange,
-                    label = "Created",
-                    value = repo.createdAt
+                    label = stringResource(id = R.string.Created),
+                    value = dateToString(repo.createdAt, DATE_FORMAT_EEEE_DD_MMMM_YYYY)
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 SquareRepoMetadata(
                     icon = Icons.Default.CheckCircle,
-                    label = "Updated",
-                    value = repo.updatedAt
+                    label = stringResource(id = R.string.Updated),
+                    value = dateToString(repo.updatedAt, DATE_FORMAT_EEEE_DD_MMMM_YYYY)
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 SquareRepoMetadata(
                     icon = Icons.Default.CheckCircle,
-                    label = "Pushed",
-                    value = repo.pushedAt
+                    label = stringResource(id = R.string.Pushed),
+                    value = dateToString(repo.pushedAt, DATE_FORMAT_EEEE_DD_MMMM_YYYY)
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 SquareRepoMetadata(
                     icon = Icons.Default.Face,
-                    label = "Watchers",
+                    label = stringResource(id = R.string.Watchers),
                     value = repo.watchersCount.toString()
                 )
             }
@@ -220,24 +206,25 @@ fun SquareRepoMetadata(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.9f)
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(
                 text = label,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.9f)
             )
             Text(
                 text = value,
-                style = MaterialTheme.typography.bodySmall
+                modifier = Modifier.padding(top = 2.dp),
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
